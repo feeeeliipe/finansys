@@ -3,13 +3,16 @@ import { BaseResourceModel } from '../models/base-resource.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, flatMap } from 'rxjs/operators';
+import { Injector } from '@angular/core';
 
 export abstract class BaseResourceService<T extends BaseResourceModel> {
     
     protected http: HttpClient;
 
-    constructor(protected apiPath: string) {
-
+    constructor(protected apiPath: string, protected injector: Injector) {
+        // Usa o injector para não precisar passar todas as vezes o objeto de HttpClient instanciado
+        // Se já existir uma instância do HttpClient o angular vai usar a mesma
+        this.http = injector.get(HttpClient);
     }
 
     getAll(): Observable<T[]> {
