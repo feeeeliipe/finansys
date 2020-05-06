@@ -14,6 +14,15 @@ export class Entry extends BaseResourceModel {
         super();
     }
 
+    /* 
+    Um novo objeto do tipo entry é instanciado para garantir que os metodos 
+    criados na classe de modelo possam ser utilizados durante a aplicação.
+    Exemplo: paidText()
+    */
+    static fromJson(jsonData: any) {
+        return Object.assign(new Entry(), jsonData);
+    }
+
     static types = {
         expense: 'Despesa',
         renevue: 'Receita'
