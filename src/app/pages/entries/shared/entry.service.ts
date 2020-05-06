@@ -2,9 +2,8 @@ import { Injectable, Injector } from '@angular/core';
 import { Entry } from './entry.model';
 import { CategoryService } from './../../categories/shared/category.service'
 import { BaseResourceService } from 'src/app/shared/services/base-resource.service';
-import { flatMap, map, catchError } from 'rxjs/operators';
+import { flatMap, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Category } from '../../categories/shared/category.model';
 
 @Injectable({
   providedIn: 'root'
