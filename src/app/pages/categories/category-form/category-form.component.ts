@@ -30,7 +30,7 @@ export class CategoryFormComponent extends BaseResourceFormComponent<Category> {
   }
 
   protected editionPageTitle(): string {
-    let title = this.resource.name ? this.resource.name : '';
+    let title = this.resource.name || '';
     title = "Editando a categoria: " + title;
     return title;
   }
