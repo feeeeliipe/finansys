@@ -12,4 +12,8 @@ export class ReportsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  generateReports() {
+    console.log('Aqui calcala os valores');
+  }
+
 }
