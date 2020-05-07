@@ -5,7 +5,8 @@ interface HeaderParams {
   title: string,
   btnClass: string,
   btnLink: string,
-  btnText: string
+  btnText: string,
+  showButton: string
 }
 
 @Component({
@@ -18,6 +19,7 @@ export class PageHeaderComponent implements OnInit {
   @Input() headerParams: HeaderParams;
 
   constructor() {
+
   }
 
   ngOnInit(): void {

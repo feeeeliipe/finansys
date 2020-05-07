@@ -5,7 +5,7 @@
         </h1>
     </div>
     
-    <div class="col-md">
+    <div class="col-md" *ngIf="headerParams.showButton">
         <a [routerLink]="headerParams.btnLink" class="btn float-right" [class]="headerParams.btnClass">{{headerParams.btnText}}</a>
     </div>
 </div>
