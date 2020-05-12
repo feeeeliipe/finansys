@@ -2,6 +2,7 @@ import { InMemoryDbService } from 'angular-in-memory-web-api';
 
 import { Category } from './pages/categories/shared/category.model';
 import { Entry } from './pages/entries/shared/entry.model';
+import { Goal } from './pages/goals/shared/goals.model';
 
 export class InMemoryDatabase implements InMemoryDbService {
     
@@ -34,6 +35,11 @@ export class InMemoryDatabase implements InMemoryDbService {
           { id: 55, name: 'Cinema', categoryId: categories[1].id, category: categories[1], paid: false, date: "28/11/2018", amount: "30,00", type: "expense" }  as Entry
         ]
 
-        return { categories, entries }
+        const goals: Goal[] = [
+          { id: 1, description: 'Comprar uma Q-tri', initialDate: '11/05/2020', endDate: '31/12/2020', expectedAmount: '20.000,00', installmentsQuantity: 7, installmentsValue: "2800,00" } as Goal,
+          { id: 2, description: 'Viagem Peru', initialDate: '01/01/2020', endDate: '10/10/2020', expectedAmount: '5.000,00', installmentsQuantity: 10, installmentsValue: "500,00" } as Goal       
+        ];
+
+        return { categories, entries, goals }
       }
 }

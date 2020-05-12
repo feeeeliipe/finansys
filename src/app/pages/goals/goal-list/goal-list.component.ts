@@ -10,8 +10,8 @@ import { GoalService } from "../shared/goals.service";
 })
 export class GoalListComponent extends BaseResourceListComponent<Goal> {
 
-  constructor(protected categoryService: GoalService) { 
-    super(categoryService);
+  constructor(protected goalService: GoalService) { 
+    super(goalService);
   }
 
 }

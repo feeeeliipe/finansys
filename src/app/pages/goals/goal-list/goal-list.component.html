@@ -1,1 +1,34 @@
-<p>goal-list works!</p>
+<app-bread-crumb 
+    [items]="[{ text: 'Metas'}]"
+></app-bread-crumb>
+
+<app-page-header
+    [headerParams]="{ title: 'Metas', btnClass: 'btn-success', btnLink: 'new', btnText: 'Nova Meta', showButton: true }"
+></app-page-header>
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Meta</th>
+            <th>Valor final acumulado</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let goal of resources">
+            <td>
+                <strong>{{goal.description}}</strong><br>
+                <small>{{goal.initialDate}} - {{goal.endDate}}</small>
+            </td>
+            <td>
+                <strong>{{goal.expectedAmount}}</strong>
+            </td>
+            <td>
+                <a [routerLink]="[goal.id, 'edit']" class="btn btn-outline-info sm">Editar</a>
+                <button (click)="deleteResource(goal)" class="btn btn-outline-danger sm ml-2">Excluir</button>
+            </td>
+        </tr>
+    </tbody>
+
+</table>

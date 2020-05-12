@@ -5,11 +5,11 @@ export class Goal extends BaseResourceModel {
     constructor(
         public id?:number, 
         public description?:string, 
-        public initialDate?: Date, 
-        public endDate?: Date, 
-        public expectedAmount?: number, 
+        public initialDate?: string, 
+        public endDate?: string, 
+        public expectedAmount?: string, 
         public installmentsQuantity?: number,
-        public installmentsValue?: number) {
+        public installmentsValue?: string) {
 
         super();
     }
