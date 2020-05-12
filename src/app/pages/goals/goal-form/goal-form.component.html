@@ -1,1 +1,59 @@
-<p>goal-form works!</p>
+<app-bread-crumb 
+    [items]="[{ text: 'Metas', link: '/goals'}, { text: pageTitle }]">
+</app-bread-crumb>
+
+<app-page-header
+    [headerParams]="{ title: pageTitle, btnClass: 'btn-light', btnLink: '/goals', btnText: 'Voltar', showButton: true }"
+></app-page-header>
+
+<form [formGroup]="resourceForm" (submit)="submitForm()">
+    <div class="card">
+        <div class="card-header">
+            Informações sobre a meta
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="description">Descrição</label>
+                    <input type="text" class="form-control" id="description" formControlName="description">
+                    <app-form-field-error 
+                        [form-control]="resourceForm.get('description')"
+                    ></app-form-field-error>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="initialDate">Data Inicial</label>
+                    <input type="text" class="form-control" id="initialDate" formControlName="initialDate">
+                    <app-form-field-error 
+                        [form-control]="resourceForm.get('initialDate')"
+                    ></app-form-field-error>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="endDate">Data Final</label>
+                    <input type="text" class="form-control" id="endDate" formControlName="endDate">
+                    <app-form-field-error 
+                        [form-control]="resourceForm.get('endDate')"
+                    ></app-form-field-error>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="endDate">Quanto precisa acumular ?</label>
+                    <input type="text" class="form-control" id="expectedAmount" formControlName="expectedAmount">
+                    <app-form-field-error 
+                        [form-control]="resourceForm.get('expectedAmount')"
+                    ></app-form-field-error>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md">
+                    <strong>
+                        Para atingir essa meta serão necessárias {{resourceForm.value.installmentsQuantity}} parcelas de R$ {{resourceForm.value.installmentsValue}}
+                    </strong>
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <app-server-error-messages [server-error-messages]="serverErrorMessages"></app-server-error-messages>
+    <button [disabled]="submittingForm || resourceForm.invalid" type="submit" class="btn btn-outline-dark btn-lg mt-2 float-right">Salvar</button>
+</form>
