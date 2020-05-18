@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  base_url: 'http://localhost:3001',
+  jwt_secret: 'ec6fca6739d7d0167a42fced7e3c9638'
 };
 
 /*
