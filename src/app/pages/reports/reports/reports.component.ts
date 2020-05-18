@@ -95,7 +95,7 @@ export class ReportsComponent implements OnInit {
     this.categories.forEach(category => {
       // filtrando lançamentos pela categoria e tipo
       const filteredEntries = this.entries.filter(
-        entry => (entry.categoryId == category.id) && (entry.type == entryType)
+        entry => (entry.categoryId == category._id) && (entry.type == entryType)
       )  
     
       // se encontrou lançamentos para a categoria do contexto

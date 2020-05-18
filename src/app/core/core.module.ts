@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HttpClientModule } from '@angular/common/http';
-
-import { NavbarComponent } from './components/navbar/navbar.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
+import { AuthInterceptor } from '../shared/interceptors/auth.interceptor';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
   declarations: [NavbarComponent],
@@ -25,6 +24,13 @@ import { RouterModule } from '@angular/router';
 
     // shared components
     NavbarComponent
+  ], 
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }  
   ]
 })
 export class CoreModule { }

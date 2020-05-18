@@ -11,4 +11,8 @@ export class AuthenticationService {
     login(loginInfo): Observable<any> {
         return this.http.post(`${environment.base_url}/auth/authenticate`, loginInfo);
     }
+
+    getToken(): string {
+        return localStorage.getItem('fortune-token');
+    }
 }

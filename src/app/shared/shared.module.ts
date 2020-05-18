@@ -30,7 +30,7 @@ import { ServerErrorMessagesComponent } from './components/server-error-messages
     BreadCrumbComponent,
     PageHeaderComponent,
     FormFieldErrorComponent,
-    ServerErrorMessagesComponent
+    ServerErrorMessagesComponent,
   ]
 })
 export class SharedModule { }

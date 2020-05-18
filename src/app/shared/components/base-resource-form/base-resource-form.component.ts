@@ -64,7 +64,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
   protected loadResource() {
     if(this.currentAction == "edit") {
       this.route.paramMap.pipe(
-        switchMap(params => this.resourceService.getById(+params.get("id")))
+        switchMap(params => this.resourceService.getById(params.get("id")))
       ).subscribe(resource => {
         this.resource = resource;
         this.resourceForm.patchValue(this.resource);
@@ -125,7 +125,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
     // A propriedade "skipLocationChange" não adiciona o historico de navegação para essa rota.
     this.router.navigateByUrl(parentRoute, {skipLocationChange: true}).then(
       () => {
-        this.router.navigate([parentRoute, resource.id, 'edit']);
+        this.router.navigate([parentRoute, resource._id, 'edit']);
       }
     );
   }

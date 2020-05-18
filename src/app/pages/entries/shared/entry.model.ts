@@ -2,14 +2,14 @@ import { Category } from '../../categories/shared/category.model';
 import { BaseResourceModel } from 'src/app/shared/models/base-resource.model';
 
 export class Entry extends BaseResourceModel {
-    constructor(public id?: number,
+    constructor(public _id?: string,
                 public name?: string,
                 public description?: string, 
                 public type?: string,
                 public amount?: string,
                 public date?: string,
                 public paid?: boolean,
-                public categoryId?: number,
+                public categoryId?: string,
                 public category?: Category) {
         super();
     }

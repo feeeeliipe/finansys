@@ -20,7 +20,7 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
     const mustDelete = confirm(this.deleteConfirmationMessage());
     
     if(mustDelete) {
-      this.resourceService.delete(resource.id).subscribe(
+      this.resourceService.delete(resource._id).subscribe(
         () => { 
           this.resources = this.resources.filter(element => element != resource);
         }, 
