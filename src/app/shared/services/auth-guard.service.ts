@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import jwt from 'jsonwebtoken'
 import { environment } from 'src/environments/environment';
+import { JwtHelperService } from "@auth0/angular-jwt";
 import toastr from 'toastr'
 
 @Injectable({
@@ -13,16 +13,16 @@ export class AuthGuardService implements CanActivate {
 
   isLogged(): boolean {
     const token = localStorage.getItem('fortune-token');
-
+    
     if(!token) {
       return false;
     }
-
-    jwt.verify(token, environment.jwt_secret, (err, decoded) => {
-      if(err) {
-          return false;
-      }
-    });
+    
+    const jwt = new JwtHelperService();
+    if(jwt.isTokenExpired(token))
+    {
+      return false;  
+    }
 
     return true;
   }
