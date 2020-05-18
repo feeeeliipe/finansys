@@ -19,7 +19,11 @@ export class LoginComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    
+    const token = this.authtenticationService.getToken();
+    if(token) {
+      this.router.navigate(['/reports']);  
+    }
+
     this.loginForm = this.fb.group({
       email: [null, Validators.required],
       password: [null, Validators.required]
