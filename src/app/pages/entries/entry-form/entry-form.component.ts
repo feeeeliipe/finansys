@@ -59,13 +59,31 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
     )
   }
 
-  // PROTECTED METHODS 
+  // PROTECTED METHODS
+  protected prepareFormValues(resource): Entry {
+    resource.amount = resource.amount + '';
+    resource.dueDate = new Date(resource.dueDate);
+    resource.paidDate = new Date(resource.paidDate);
+    resource.category = resource.category._id;
+    return resource;
+  }
+  
+  protected createResource() {
+    this.formatValues();
+    super.createResource();
+  }
+
+  protected updateResource() {
+    this.formatValues();
+    super.updateResource();
+  }
+
   protected creationPageTitle(): string {
     return "Novo Lançamento";
   }
 
   protected editionPageTitle(): string {
-    let title = this.resource.name || '';
+    let title = this.resource.description || '';
     title = "Editando lançamento: " + title;
     return title;
   }
@@ -73,17 +91,24 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
   protected buildResourceForm() {
     this.resourceForm = this.formBuilder.group({
       _id: [null],
-      name: [null, [Validators.required, Validators.minLength(2)]],
-      description: [null],
+      description: [null, [Validators.required, Validators.minLength(2)]],
+      longDescription: [null],
       type: ['expense', [Validators.required]],
       amount: [null, [Validators.required]],
-      date: [null, [Validators.required]],
+      dueDate: [null, [Validators.required]],
+      paidDate: [null],
       paid: [true, [Validators.required]],
-      categoryId: [null, [Validators.required]]
+      category: [null, [Validators.required]]
     });
   }
 
   // PRIVATE METHODS 
+  private formatValues() {
+    let amount = this.resourceForm.controls['amount'].value;
+    amount = amount.replace(",", ".");
+    this.resourceForm.controls['amount'].setValue(amount);
+  }
+  
   private loadCategories() {
     this.categoryService.getAll().subscribe(categories => {
       this.categories = categories

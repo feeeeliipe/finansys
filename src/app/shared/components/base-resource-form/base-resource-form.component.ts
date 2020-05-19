@@ -66,13 +66,19 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
       this.route.paramMap.pipe(
         switchMap(params => this.resourceService.getById(params.get("id")))
       ).subscribe(resource => {
-        this.resource = resource;
+        this.resource = this.prepareFormValues(resource);
         this.resourceForm.patchValue(this.resource);
       }, 
       error => {
         alert("Ocorreu um erro no servidor.");
       });
     }
+  }
+
+  // Metodo criado para formulário que precisam tratar 
+  // algum valor antes de setar o objeto ao formulário 
+  protected prepareFormValues(resource): T {
+    return resource;
   }
 
   protected setPageTitle() {
