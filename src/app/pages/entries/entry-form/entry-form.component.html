@@ -6,8 +6,6 @@
     [headerParams]="{ title: pageTitle, btnClass: 'btn-light', btnLink: '/entries', btnText: 'Voltar' , showButton: true }"
 ></app-page-header>
 
-{{ resourceForm.value | json }}
-
 <form [formGroup]="resourceForm" (submit)="submitForm()">
     <div class="card">
         <div class="card-header">

@@ -10,16 +10,17 @@ export class AppComponent {
   
   showNavbar = false;
 
+  private isRouteFromAuthModule(router): boolean {
+    return (router.url.indexOf('/auth') == -1) && (router.urlAfterRedirects.indexOf('/auth') == -1)
+  }
+
   constructor(private router: Router) {
-      this.router.events.subscribe((event) => {
-        if(event instanceof NavigationEnd) {
-          if(event.url.indexOf('/auth') == -1) {
-            this.showNavbar = true;
-          } else {
-            this.showNavbar = false;
-          }
+      this.router.events.subscribe((router) => {
+        if(router instanceof NavigationEnd) {
+          this.showNavbar = this.isRouteFromAuthModule(router);
         }
       });
   }
-  
 }
+
+

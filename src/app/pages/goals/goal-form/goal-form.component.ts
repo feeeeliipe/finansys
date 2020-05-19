@@ -11,16 +11,30 @@ import { Validators } from '@angular/forms';
 })
 export class GoalFormComponent extends BaseResourceFormComponent<Goal> {
 
+  ptBR = {
+    firstDayOfWeek: 0,
+    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+    dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
+    monthNames: [
+      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
+      'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ],
+    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    today: 'Hoje',
+    clear: 'Limpar'
+  }
+
   constructor(protected goalService: GoalService, protected injector: Injector) { 
     super(injector, new Goal(), goalService, Goal.fromJson);
   }
 
   protected buildResourceForm() {
     this.resourceForm = this.formBuilder.group({
-      id: [null],
+      _id: [null],
       description: [null, Validators.required],
       initialDate: [null, Validators.required],
-      endDate: [null, Validators.required],
+      finalDate: [null, Validators.required],
       expectedAmount: [null, Validators.required],
       installmentsQuantity: [null],
       installmentsValue: [null]

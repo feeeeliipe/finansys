@@ -6,6 +6,8 @@
     [headerParams]="{ title: pageTitle, btnClass: 'btn-light', btnLink: '/goals', btnText: 'Voltar', showButton: true }"
 ></app-page-header>
 
+{{ resourceForm.value | json }}
+
 <form [formGroup]="resourceForm" (submit)="submitForm()">
     <div class="card">
         <div class="card-header">
@@ -22,14 +24,26 @@
                 </div>
                 <div class="form-group col-md-2">
                     <label for="initialDate">Data Inicial</label>
-                    <input type="text" class="form-control" id="initialDate" formControlName="initialDate">
+                    <p-calendar id="initialDate" 
+                                formControlName="initialDate"
+                                inputStyleClass="form-control"
+                                dateFormat="dd/mm/yy"
+                                [locale]="ptBR"
+                                [showButtonBar]="true">
+                    </p-calendar>
                     <app-form-field-error 
                         [form-control]="resourceForm.get('initialDate')"
                     ></app-form-field-error>
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="endDate">Data Final</label>
-                    <input type="text" class="form-control" id="endDate" formControlName="endDate">
+                    <label for="finalDate">Data Final</label>
+                    <p-calendar id="finalDate" 
+                                formControlName="finalDate"
+                                inputStyleClass="form-control"
+                                dateFormat="dd/mm/yy"
+                                [locale]="ptBR"
+                                [showButtonBar]="true">
+                    </p-calendar>
                     <app-form-field-error 
                         [form-control]="resourceForm.get('endDate')"
                     ></app-form-field-error>

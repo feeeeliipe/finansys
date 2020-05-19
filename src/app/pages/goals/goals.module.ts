@@ -3,6 +3,7 @@ import { GoalsRoutingModule } from './goals-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { GoalListComponent } from './goal-list/goal-list.component';
 import { GoalFormComponent } from './goal-form/goal-form.component';
+import { CalendarModule } from 'primeng/calendar';
 
 
 
@@ -10,7 +11,8 @@ import { GoalFormComponent } from './goal-form/goal-form.component';
   declarations: [GoalListComponent, GoalFormComponent],
   imports: [
     SharedModule,
-    GoalsRoutingModule
+    GoalsRoutingModule,
+    CalendarModule
   ]
 })
 export class GoalsModule { }

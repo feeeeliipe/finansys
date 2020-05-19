@@ -5,7 +5,8 @@ import { EntryService } from '../../entries/shared/entry.service';
 import currencyFormatter from "currency-formatter";
 import { Category } from '../../categories/shared/category.model';
 import { Entry } from '../../entries/shared/entry.model';
-import * as moment from 'moment';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import toastr from 'toastr';
 
 @Component({
   selector: 'app-reports',
@@ -14,9 +15,10 @@ import * as moment from 'moment';
 })
 export class ReportsComponent implements OnInit {
 
-  expenseTotal: any = 0;
-  revenueTotal: any = 0;
-  balance: any = 0;
+  expenseTotal: any = currencyFormatter.format(0, { code : 'BRL'} );
+  revenueTotal: any = currencyFormatter.format(0, { code : 'BRL'} );
+  balance: any = currencyFormatter.format(0, { code : 'BRL'} );
+  balanceMessage = '';
 
   expenseChartData: any;
   revenueChartData: any;
@@ -31,32 +33,63 @@ export class ReportsComponent implements OnInit {
     }
   };
 
+  ptBR = {
+    firstDayOfWeek: 0,
+    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+    dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
+    monthNames: [
+      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
+      'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ],
+    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    today: 'Hoje',
+    clear: 'Limpar'
+  }
+
   categories: Category[] = [];
   entries: Entry[] = [];
-
-  @ViewChild('month') month: ElementRef = null;
-  @ViewChild('year') year: ElementRef = null;
-
+  
+  filtersForm: FormGroup;
+  
   constructor(
     private categoryService: CategoryService,
-    private entryService: EntryService) {
+    private entryService: EntryService, 
+    private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
+    
+    const now = new Date();
+    var firstDay = new Date(now.getFullYear(), now.getMonth(), 1); 
+    var lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0); 
+    
+    this.filtersForm = this.fb.group({
+      initialDueDate: [firstDay], 
+      finalDueDate: [lastDay]
+    });
+
+    this.filtersForm.controls['initialDueDate'].valueChanges.subscribe(value => {
+      const lastDayOfMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0);
+      this.filtersForm.controls['finalDueDate'].setValue(lastDayOfMonth);
+    });
+    
     this.categoryService.getAll().subscribe(
       categories => this.categories = categories
     );
+
+    this.generateReports();
   }
 
 
   generateReports() {
-    const month = this.month.nativeElement.value
-    const year  = this.year.nativeElement.value;
+    const initialDueDate = this.filtersForm.controls['initialDueDate'].value;
+    const finalDueDate  = this.filtersForm.controls['finalDueDate'].value;
 
-    if(!month || !year) {
-      alert('Você precisa selecionar o mês e ano!');  
+    if(!initialDueDate || !finalDueDate) {
+      toastr.error('É necessário informar as datas para busca das informações!');
     } else {
-      this.entryService.getByMonthAndYear(month, year).subscribe(this.setValues.bind(this));
+      this.entryService.getByPeriod(initialDueDate, finalDueDate).subscribe(this.setValues.bind(this));
     }
   }
 
@@ -87,7 +120,15 @@ export class ReportsComponent implements OnInit {
     
     this.expenseTotal = currencyFormatter.format(expenseTotal, { code : 'BRL'} );
     this.revenueTotal = currencyFormatter.format(revenueTotal, { code : 'BRL'} );
-    this.balance = currencyFormatter.format(revenueTotal - expenseTotal, { code: 'BRL'});
+    const balance = revenueTotal - expenseTotal;
+    if(balance > 0) {
+      this.balanceMessage = 'Ufa, sobrou uma grana! :)';
+    } else if(balance == 0) {
+      this.balanceMessage = 'Não sobrou, mas também não faltou : |';
+    } else {
+      this.balanceMessage = 'Deu ruim, faltou grana!';
+    }
+    this.balance = currencyFormatter.format(balance, { code: 'BRL'});
   }
 
   private getChatData(entryType: string, backgroundColor: string, chartTitle: string) {
@@ -95,7 +136,7 @@ export class ReportsComponent implements OnInit {
     this.categories.forEach(category => {
       // filtrando lançamentos pela categoria e tipo
       const filteredEntries = this.entries.filter(
-        entry => (entry.categoryId == category._id) && (entry.type == entryType)
+        entry => (entry.category._id == category._id) && (entry.type == entryType)
       )  
     
       // se encontrou lançamentos para a categoria do contexto

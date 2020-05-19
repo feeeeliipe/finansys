@@ -3,13 +3,13 @@ import { BaseResourceModel } from 'src/app/shared/models/base-resource.model';
 
 export class Entry extends BaseResourceModel {
     constructor(public _id?: string,
-                public name?: string,
-                public description?: string, 
+                public description?: string,
+                public longDescription?: string, 
                 public type?: string,
                 public amount?: string,
-                public date?: string,
+                public dueDate?: Date,
+                public paidDate?: Date,
                 public paid?: boolean,
-                public categoryId?: string,
                 public category?: Category) {
         super();
     }
