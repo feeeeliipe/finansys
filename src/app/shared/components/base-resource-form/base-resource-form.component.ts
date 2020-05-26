@@ -81,6 +81,11 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
     return resource;
   }
 
+  // Metodo criado para formatar valores antes de enviar para o servidor
+  protected prepareValuesToServer(resource): T {
+    return resource;
+  }
+
   protected setPageTitle() {
     if(this.currentAction == 'new') {
       this.pageTitle = this.creationPageTitle();
@@ -98,7 +103,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
   }
 
   protected createResource() {
-    const resource: T = this.jsonDataToResourceFn(this.resourceForm.value);   
+    const resource: T = this.prepareValuesToServer(this.jsonDataToResourceFn(this.resourceForm.value));
     this.resourceService.create(resource).subscribe(
       resource => {
         this.actionsForSuccess(resource)
@@ -110,7 +115,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
   }
 
   protected updateResource() {
-    const resource: T = this.jsonDataToResourceFn(this.resourceForm.value);
+    const resource: T = this.prepareValuesToServer(this.jsonDataToResourceFn(this.resourceForm.value));
     this.resourceService.update(resource).subscribe(
       resource => {
         this.actionsForSuccess(resource)

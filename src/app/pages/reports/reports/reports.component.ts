@@ -3,10 +3,11 @@ import { CategoryService } from '../../categories/shared/category.service';
 import { EntryService } from '../../entries/shared/entry.service';
 
 import currencyFormatter from "currency-formatter";
-import { Category } from '../../categories/shared/category.model';
 import { Entry } from '../../entries/shared/entry.model';
+import { Category } from '../../categories/shared/category.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import toastr from 'toastr';
+import { generalConfig } from '../../../shared/config/general.configs'
 
 @Component({
   selector: 'app-reports',
@@ -17,6 +18,7 @@ export class ReportsComponent implements OnInit {
 
   expenseTotal: any = currencyFormatter.format(0, { code : 'BRL'} );
   revenueTotal: any = currencyFormatter.format(0, { code : 'BRL'} );
+  investmentTotal: any = currencyFormatter.format(0, { code : 'BRL'} );
   balance: any = currencyFormatter.format(0, { code : 'BRL'} );
   balanceMessage = '';
 
@@ -33,19 +35,7 @@ export class ReportsComponent implements OnInit {
     }
   };
 
-  ptBR = {
-    firstDayOfWeek: 0,
-    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-    dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
-    monthNames: [
-      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
-      'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-    ],
-    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    today: 'Hoje',
-    clear: 'Limpar'
-  }
+  ptBR = generalConfig.ptBR;
 
   categories: Category[] = [];
   entries: Entry[] = [];
@@ -108,19 +98,23 @@ export class ReportsComponent implements OnInit {
   private calculateBalance() {
     let expenseTotal = 0;
     let revenueTotal = 0;  
+    let investmentTotal = 0;
   
     this.entries.forEach(entry => {
       const entryAmount = currencyFormatter.unformat(entry.amount, { code: 'BRL'});
       if(entry.type == 'expense') {
         expenseTotal += entryAmount;
-      } else {
+      } else if(entry.type == 'investment') {
+        investmentTotal += entryAmount;
+      } else if(entry.type == 'revenue') {
         revenueTotal += entryAmount;
       }
     });
     
     this.expenseTotal = currencyFormatter.format(expenseTotal, { code : 'BRL'} );
     this.revenueTotal = currencyFormatter.format(revenueTotal, { code : 'BRL'} );
-    const balance = revenueTotal - expenseTotal;
+    this.investmentTotal = currencyFormatter.format(investmentTotal, { code : 'BRL'} );
+    const balance = revenueTotal - (expenseTotal + investmentTotal);
     if(balance > 0) {
       this.balanceMessage = 'Ufa, sobrou uma grana! :)';
     } else if(balance == 0) {

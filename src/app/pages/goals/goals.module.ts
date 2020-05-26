@@ -4,6 +4,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { GoalListComponent } from './goal-list/goal-list.component';
 import { GoalFormComponent } from './goal-form/goal-form.component';
 import { CalendarModule } from 'primeng/calendar';
+import { IMaskModule } from 'angular-imask';
 
 
 
@@ -12,7 +13,8 @@ import { CalendarModule } from 'primeng/calendar';
   imports: [
     SharedModule,
     GoalsRoutingModule,
-    CalendarModule
+    CalendarModule,
+    IMaskModule
   ]
 })
 export class GoalsModule { }

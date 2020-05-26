@@ -3,6 +3,7 @@ import { GoalService } from '../shared/goals.service';
 import { Goal } from '../shared/goals.model';
 import { BaseResourceFormComponent } from 'src/app/shared/components/base-resource-form/base-resource-form.component';
 import { Validators } from '@angular/forms';
+import { generalConfig } from '../../../shared/config/general.configs'
 
 @Component({
   selector: 'app-goal-form',
@@ -11,19 +12,8 @@ import { Validators } from '@angular/forms';
 })
 export class GoalFormComponent extends BaseResourceFormComponent<Goal> {
 
-  ptBR = {
-    firstDayOfWeek: 0,
-    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-    dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
-    monthNames: [
-      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
-      'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-    ],
-    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    today: 'Hoje',
-    clear: 'Limpar'
-  }
+  ptBR = generalConfig.ptBR;
+  imaskConfig = generalConfig.imaskConfig;
 
   constructor(protected goalService: GoalService, protected injector: Injector) { 
     super(injector, new Goal(), goalService, Goal.fromJson);
@@ -50,4 +40,19 @@ export class GoalFormComponent extends BaseResourceFormComponent<Goal> {
     title = "Editando a meta: " + title;
     return title;
   }
+
+  protected prepareFormValues(resource): Goal {
+    resource.expectedAmount = resource.expectedAmount + '';
+    resource.initialDate = new Date(resource.initialDate);
+    resource.finalDate = new Date(resource.finalDate);
+    return resource;
+  }
+
+  protected prepareValuesToServer(goal): Goal {
+    let expectedAmount = goal.expectedAmount;
+    expectedAmount = expectedAmount.replace(",", ".");
+    goal.expectedAmount = expectedAmount;
+    return goal;
+  }
+  
 }

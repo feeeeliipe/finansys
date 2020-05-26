@@ -25,12 +25,13 @@
                 <span class="badge badge-light">{{resource.paidText}}</span>
             </td>
             <td>
-                {{resource.category.name}}
+                <p *ngIf="resource.category">{{resource.category.name}}</p>
             </td>
             <td class="text-right">
                 <strong [class.text-success]="resource.type == 'revenue'"
-                        [class.text-danger]="resource.type == 'expense'">
-                    {{resource.amount | currency : 'BRL' }}
+                        [class.text-danger]="resource.type == 'expense'"
+                        [class.text-info]="resource.type == 'investment'">
+                    {{ resource.amount | currency : 'BRL' }}
                 </strong>
             </td>
             <td class="text-right">
@@ -45,5 +46,4 @@
             </td>
         </tr>
     </tbody>
-
 </table>

@@ -19,13 +19,14 @@
         <tr *ngFor="let goal of resources">
             <td>
                 <strong>{{goal.description}}</strong><br>
-                <small>{{goal.initialDate}} - {{goal.endDate}}</small>
+                <small>{{goal.initialDate | date: 'dd/MM/yyyy'}} - {{goal.finalDate | date: 'dd/MM/yyyy'}}</small>
             </td>
             <td>
-                <strong>{{goal.expectedAmount}}</strong>
+                <strong>{{ goal.expectedAmount | currency: 'BRL' }}</strong><br>
+                <small>{{goal.installmentsQuantity}}x {{goal.installmentsValue | currency: 'BRL' }}</small>
             </td>
             <td>
-                <a [routerLink]="[goal.id, 'edit']" class="btn btn-outline-info sm">Editar</a>
+                <a [routerLink]="[goal._id, 'edit']" class="btn btn-outline-info sm">Editar</a>
                 <button (click)="deleteResource(goal)" class="btn btn-outline-danger sm ml-2">Excluir</button>
             </td>
         </tr>

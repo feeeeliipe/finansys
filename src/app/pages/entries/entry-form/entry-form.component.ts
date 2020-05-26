@@ -6,8 +6,10 @@ import { EntryService } from '../shared/entry.service';
 
 import { Category } from '../../categories/shared/category.model';
 import { CategoryService } from '../../categories/shared/category.service';
+import { generalConfig } from "../../../shared/config/general.configs";
 
 import { BaseResourceFormComponent } from 'src/app/shared/components/base-resource-form/base-resource-form.component';
+import { retry } from 'rxjs/operators';
 
 @Component({
   selector: 'app-entry-form',
@@ -17,28 +19,8 @@ import { BaseResourceFormComponent } from 'src/app/shared/components/base-resour
 export class EntryFormComponent extends BaseResourceFormComponent<Entry> implements OnInit {
 
   categories: Array<Category>;
-  imaskConfig = {
-    mask: Number,
-    scale: 2, 
-    thousandsSeparator: '',
-    padFractionalZeros: true,
-    normalizeZeros: true,
-    radix: ','
-  }
-
-  ptBR = {
-    firstDayOfWeek: 0,
-    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-    dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
-    monthNames: [
-      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
-      'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-    ],
-    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    today: 'Hoje',
-    clear: 'Limpar'
-  }
+  imaskConfig = generalConfig.imaskConfig;
+  ptBR = generalConfig.ptBR;
 
   constructor(protected injector: Injector, 
               protected entryService: EntryService, 
@@ -68,16 +50,6 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
     return resource;
   }
   
-  protected createResource() {
-    this.formatValues();
-    super.createResource();
-  }
-
-  protected updateResource() {
-    this.formatValues();
-    super.updateResource();
-  }
-
   protected creationPageTitle(): string {
     return "Novo Lançamento";
   }
@@ -102,13 +74,12 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
     });
   }
 
-  // PRIVATE METHODS 
-  private formatValues() {
-    let amount = this.resourceForm.controls['amount'].value;
-    amount = amount.replace(",", ".");
-    this.resourceForm.controls['amount'].setValue(amount);
+  protected prepareValuesToServer(entry): Entry {
+    let amount = entry.amount;
+    entry.amount = amount.replace(",", ".");
+    return entry;
   }
-  
+
   private loadCategories() {
     this.categoryService.getAll().subscribe(categories => {
       this.categories = categories

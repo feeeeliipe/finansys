@@ -25,7 +25,8 @@ export class Entry extends BaseResourceModel {
 
     static types = {
         expense: 'Despesa',
-        revenue: 'Receita'
+        revenue: 'Receita',
+        investment: 'Investimento'
     }
 
     get paidText(): string {
