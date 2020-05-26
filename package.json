@@ -3,13 +3,18 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node server.js",
+    "postinstall": "ng build --prod",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
   "private": true,
+  "engines": {
+    "node": "12.16.2",
+    "npm": "6.14.4"
+  },
   "dependencies": {
     "@angular/animations": "~9.1.1",
     "@angular/common": "~9.1.1",
@@ -26,6 +31,7 @@
     "chart.js": "^2.9.3",
     "currency-formatter": "^1.5.5",
     "dateformat": "^3.0.3",
+    "express": "^4.17.1",
     "jquery": "^3.5.0",
     "moment": "^2.24.0",
     "primeicons": "^2.0.0",
