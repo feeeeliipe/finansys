@@ -8,7 +8,7 @@ import { Goal } from './goals.model';
 export class GoalService extends BaseResourceService<Goal> {
 
   constructor(protected injector: Injector) { 
-    super('api/goals', injector, Goal.fromJson);
+    super('/goals', injector, Goal.fromJson);
   }
 
 }

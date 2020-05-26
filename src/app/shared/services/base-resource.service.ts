@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, flatMap } from 'rxjs/operators';
 import { Injector } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 export abstract class BaseResourceService<T extends BaseResourceModel> {
     
@@ -30,7 +31,7 @@ export abstract class BaseResourceService<T extends BaseResourceModel> {
     }
 
     getAll(): Observable<T[]> {
-        return this.http.get(this.apiPath).pipe(
+        return this.http.get(`${environment.base_url}${this.apiPath}`).pipe(
           /*
           O .bind(this) garante que o contexto dentro da função "jsonDataToResources"
           será o contexto do serviço atual (BaseResourceService) e não do Map. 
@@ -44,8 +45,8 @@ export abstract class BaseResourceService<T extends BaseResourceModel> {
         )
     }
     
-    getById(id: number): Observable<T> {
-        const url = `${this.apiPath}/${id}`;
+    getById(id: string): Observable<T> {
+        const url = `${environment.base_url}${this.apiPath}/${id}`;
         return this.http.get(url).pipe(
           map(this.jsonDataToResource.bind(this)),
           catchError(this.handleError)
@@ -53,21 +54,21 @@ export abstract class BaseResourceService<T extends BaseResourceModel> {
     }
     
     create(resource: T): Observable<T> {
-        return this.http.post(this.apiPath, resource).pipe(
+        return this.http.post(`${environment.base_url}${this.apiPath}`, resource).pipe(
           map(this.jsonDataToResource.bind(this)),
           catchError(this.handleError)
         )
     }
     
     update(resource: T): Observable<T> {
-        return this.http.put(`${this.apiPath}/${resource.id}`, resource).pipe(
+        return this.http.put(`${environment.base_url}${this.apiPath}/${resource._id}`, resource).pipe(
           map(() => resource),
           catchError(this.handleError)
         );
     }
     
-    delete(id: number): Observable<any> {
-        return this.http.delete(`${this.apiPath}/${id}`).pipe(
+    delete(id: string): Observable<any> {
+        return this.http.delete(`${environment.base_url}${this.apiPath}/${id}`).pipe(
           map(() => null),
           catchError(this.handleError)
         )

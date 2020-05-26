@@ -2,9 +2,9 @@ import { Injectable, Injector } from '@angular/core';
 import { Entry } from './entry.model';
 import { CategoryService } from './../../categories/shared/category.service'
 import { BaseResourceService } from 'src/app/shared/services/base-resource.service';
-import { flatMap, catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import * as moment from 'moment';
+import { environment } from 'src/environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,42 +12,18 @@ import * as moment from 'moment';
 export class EntryService extends BaseResourceService<Entry> {
 
   constructor(protected injector: Injector, private categoryService: CategoryService) { 
-    super('api/entries', injector, Entry.fromJson);
+    super('/entries', injector, Entry.fromJson);
   }
 
-  create(entry: Entry): Observable<Entry> {
-    return this.setCategoryAndSendToServer(entry, super.create.bind(this));
+  getByPeriod(firstDate, finalDate): Observable<Entry[]> {
+    // Formata as datas 
+    const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit' }) 
+    let [{ value: month },,{ value: day },,{ value: year }] = dateTimeFormat .formatToParts(firstDate);
+    firstDate = `${year}-${month}-${day}`;
+    [{ value: month },,{ value: day },,{ value: year }] = dateTimeFormat .formatToParts(finalDate);
+    finalDate = `${year}-${month}-${day}`;
+    // Faz a chamada filtrando por data de vencimento 
+    return this.http.get<Entry[]>(`${environment.base_url}${this.apiPath}?dueDate=${firstDate},${finalDate}`);
   }
-
-  update(entry: Entry): Observable<Entry> {
-    return this.setCategoryAndSendToServer(entry, super.update.bind(this));
-  }
-
-  getByMonthAndYear(month, year): Observable<Entry[]> {
-    return this.getAll().pipe(
-      map(entries => this.filterByMonthAndYear(entries, month, year))
-    )
-  }
-
-  // PRIVATE METHODS 
-  private setCategoryAndSendToServer(entry: Entry, sendFn: any): Observable<Entry> {
-    // FAZ O RELACIONAMENTO FORÇADO DO LANÇAMENTO COM A CATEGORIA
-    // IMPLEMENTAÇÃO REALIZADA APENAS PORQUE ESTAMOS UTILIZANDO UM BACKEND MOCK
-    return this.categoryService.getById(entry.categoryId).pipe(
-      flatMap(category => {
-        entry.category = category;
-        return sendFn(entry);
-      }),
-      catchError(this.handleError)
-    )  
-  }
-
-  private filterByMonthAndYear(entries: Entry[], month: number, year: number): Array<Entry> {
-    return entries.filter(entry => {
-      const entryDate = moment(entry.date, 'DD/MM/YYYY');
-      if((entryDate.month() + 1 == month) && (entryDate.year() == year)) {
-        return entry;
-      }
-    })
-  }
+  
 }

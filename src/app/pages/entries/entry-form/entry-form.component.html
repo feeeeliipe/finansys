@@ -23,12 +23,12 @@
                         [form-control]="resourceForm.get('type')"
                     ></app-form-field-error>
                 </div>   
-                <!-- NAME  -->
-                <div class="form-group col-md-5">
-                    <label for="name">Lançamento</label>
-                    <input type="text" class="form-control" id="name" formControlName="name">    
+                <!-- DESCRIPTION -->
+                <div class="form-group col-md-7">
+                    <label for="description">Descrição Curta</label>
+                    <input type="text" class="form-control" id="description" formControlName="description">    
                     <app-form-field-error 
-                        [form-control]="resourceForm.get('name')"
+                        [form-control]="resourceForm.get('description')"
                     ></app-form-field-error>
                 </div> 
                 <!-- AMOUNT -->
@@ -44,28 +44,46 @@
                         [form-control]="resourceForm.get('amount')"
                     ></app-form-field-error>
                 </div> 
-                <!-- DATE -->
+            </div>
+            <div class="form-row">
+                <!-- DUE DATE -->
                 <div class="form-group col-md-2">
-                    <label for="date">Data</label>
-                    <p-calendar id="date" 
-                                formControlName="date"
+                    <label for="dueDate">Data de Vencimento</label>
+                    <p-calendar id="dueDate" 
+                                formControlName="dueDate"
                                 inputStyleClass="form-control"
-                                dataType="string"
                                 dateFormat="dd/mm/yy"
                                 [locale]="ptBR"
                                 [showButtonBar]="true">
                     </p-calendar>
                     <app-form-field-error 
-                        [form-control]="resourceForm.get('date')"
+                        [form-control]="resourceForm.get('dueDate')"
                     ></app-form-field-error>
                 </div> 
-            </div>
-            <div class="form-row">
-                <!-- DESCRIPTION  -->
-                <div class="form-group col-md-8">
-                    <label for="description">Descrição</label>
-                    <input type="text" class="form-control" id="description" formControlName="description">
-                </div>
+                <!-- PAID DATE -->
+                <div class="form-group col-md-2">
+                    <label for="paidDate">Data de Pagamento</label>
+                    <p-calendar id="paidDate" 
+                                formControlName="paidDate"
+                                inputStyleClass="form-control"
+                                dateFormat="dd/mm/yy"
+                                [locale]="ptBR"
+                                [showButtonBar]="true">
+                    </p-calendar>
+                    <app-form-field-error 
+                        [form-control]="resourceForm.get('paidDate')"
+                    ></app-form-field-error>
+                </div> 
+                <!-- CATEGORY -->
+                <div class="form-group col-md-5">
+                    <label for="category">Categoria</label>
+                    <select name="type" id="category" formControlName="category" class="form-control">
+                        <option *ngFor="let op of categories" [value]="op._id">{{ op.name }}</option>
+                    </select>
+                    <app-form-field-error 
+                        [form-control]="resourceForm.get('category')"
+                    ></app-form-field-error>
+                </div>    
                 <!-- PAID -->
                 <div class="form-group col-md-2">
                     <label for="paid">Pago</label>
@@ -77,16 +95,14 @@
                         [form-control]="resourceForm.get('paid')"
                     ></app-form-field-error>
                 </div>
-                <!-- CATEGORY -->
-                <div class="form-group col-md-2">
-                    <label for="categoryId">Categoria</label>
-                    <select name="type" id="categoryId" formControlName="categoryId" class="form-control">
-                        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-                    </select>
-                    <app-form-field-error 
-                        [form-control]="resourceForm.get('categoryId')"
-                    ></app-form-field-error>
-                </div>    
+            </div>
+            <div class="form-row">
+                <!-- LONG DESCRIPTION  -->
+                <div class="form-group col-md-12">
+                    <label for="longDescription">Descrição Longa</label>
+                    <textarea type="textarea" class="form-control" id="longDescription" formControlName="longDescription"></textarea>
+                </div>
+                
             </div>
         </div>
     </div>

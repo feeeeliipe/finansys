@@ -21,7 +21,7 @@
                 <small>{{resource.description}}</small>
             </td>
             <td>
-                <a [routerLink]="[resource.id, 'edit']" class="btn btn-outline-info sm">Editar</a>
+                <a [routerLink]="[resource._id, 'edit']" class="btn btn-outline-info sm">Editar</a>
                 <button (click)="deleteResource(resource)" class="btn btn-outline-danger sm ml-2">Excluir</button>
             </td>
         </tr>

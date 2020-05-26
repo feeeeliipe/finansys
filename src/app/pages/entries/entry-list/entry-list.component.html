@@ -12,32 +12,38 @@
             <th>Lançamento</th>
             <th>Categoria</th>
             <th class="text-right">Valor</th>
+            <th class="text-right">Vencimento</th>
+            <th class="text-right">Pagamento</th>
             <th class="text-center">Ações</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let resource of resources">
             <td>
-                <strong>{{resource.name}}</strong><br>
-                <small class="text-success">{{resource.date}}</small><br>
-                <small *ngIf="resource.description">{{resource.description}}</small>
-            </td>
-            <td>
-                {{resource.category.name}}
-            </td>
-            <td class="text-right">
-                <strong [class.text-success]="resource.type == 'revenue'"
-                        [class.text-danger]="resource.type == 'expense'">
-                    {{resource.amount}}
-                </strong>
+                <strong>{{resource.description}}</strong>
                 <br>
                 <span class="badge badge-light">{{resource.paidText}}</span>
             </td>
+            <td>
+                <p *ngIf="resource.category">{{resource.category.name}}</p>
+            </td>
+            <td class="text-right">
+                <strong [class.text-success]="resource.type == 'revenue'"
+                        [class.text-danger]="resource.type == 'expense'"
+                        [class.text-info]="resource.type == 'investment'">
+                    {{ resource.amount | currency : 'BRL' }}
+                </strong>
+            </td>
+            <td class="text-right">
+                {{ resource.dueDate | date:'dd/MM/yyyy' }}
+            </td>
+            <td class="text-right">
+                {{ resource.paidDate | date:'dd/MM/yyyy'}}
+            </td>
             <td class="text-center">
-                <a [routerLink]="[resource.id, 'edit']" class="btn btn-outline-info sm">Editar</a>
+                <a [routerLink]="[resource._id, 'edit']" class="btn btn-outline-info sm">Editar</a>
                 <button (click)="deleteResource(resource)" class="btn btn-outline-danger sm ml-2">Excluir</button>
             </td>
         </tr>
     </tbody>
-
 </table>

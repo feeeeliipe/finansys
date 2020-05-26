@@ -6,8 +6,10 @@ import { EntryService } from '../shared/entry.service';
 
 import { Category } from '../../categories/shared/category.model';
 import { CategoryService } from '../../categories/shared/category.service';
+import { generalConfig } from "../../../shared/config/general.configs";
 
 import { BaseResourceFormComponent } from 'src/app/shared/components/base-resource-form/base-resource-form.component';
+import { retry } from 'rxjs/operators';
 
 @Component({
   selector: 'app-entry-form',
@@ -17,28 +19,8 @@ import { BaseResourceFormComponent } from 'src/app/shared/components/base-resour
 export class EntryFormComponent extends BaseResourceFormComponent<Entry> implements OnInit {
 
   categories: Array<Category>;
-  imaskConfig = {
-    mask: Number,
-    scale: 2, 
-    thousandsSeparator: '',
-    padFractionalZeros: true,
-    normalizeZeros: true,
-    radix: ','
-  }
-
-  ptBR = {
-    firstDayOfWeek: 0,
-    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-    dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
-    monthNames: [
-      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
-      'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-    ],
-    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    today: 'Hoje',
-    clear: 'Limpar'
-  }
+  imaskConfig = generalConfig.imaskConfig;
+  ptBR = generalConfig.ptBR;
 
   constructor(protected injector: Injector, 
               protected entryService: EntryService, 
@@ -59,31 +41,45 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
     )
   }
 
-  // PROTECTED METHODS 
+  // PROTECTED METHODS
+  protected prepareFormValues(resource): Entry {
+    resource.amount = resource.amount + '';
+    resource.dueDate = new Date(resource.dueDate);
+    resource.paidDate = new Date(resource.paidDate);
+    resource.category = resource.category._id;
+    return resource;
+  }
+  
   protected creationPageTitle(): string {
     return "Novo Lançamento";
   }
 
   protected editionPageTitle(): string {
-    let title = this.resource.name || '';
+    let title = this.resource.description || '';
     title = "Editando lançamento: " + title;
     return title;
   }
 
   protected buildResourceForm() {
     this.resourceForm = this.formBuilder.group({
-      id: [null],
-      name: [null, [Validators.required, Validators.minLength(2)]],
-      description: [null],
+      _id: [null],
+      description: [null, [Validators.required, Validators.minLength(2)]],
+      longDescription: [null],
       type: ['expense', [Validators.required]],
       amount: [null, [Validators.required]],
-      date: [null, [Validators.required]],
+      dueDate: [null, [Validators.required]],
+      paidDate: [null],
       paid: [true, [Validators.required]],
-      categoryId: [null, [Validators.required]]
+      category: [null, [Validators.required]]
     });
   }
 
-  // PRIVATE METHODS 
+  protected prepareValuesToServer(entry): Entry {
+    let amount = entry.amount;
+    entry.amount = amount.replace(",", ".");
+    return entry;
+  }
+
   private loadCategories() {
     this.categoryService.getAll().subscribe(categories => {
       this.categories = categories

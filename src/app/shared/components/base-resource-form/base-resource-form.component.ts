@@ -64,15 +64,26 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
   protected loadResource() {
     if(this.currentAction == "edit") {
       this.route.paramMap.pipe(
-        switchMap(params => this.resourceService.getById(+params.get("id")))
+        switchMap(params => this.resourceService.getById(params.get("id")))
       ).subscribe(resource => {
-        this.resource = resource;
+        this.resource = this.prepareFormValues(resource);
         this.resourceForm.patchValue(this.resource);
       }, 
       error => {
         alert("Ocorreu um erro no servidor.");
       });
     }
+  }
+
+  // Metodo criado para formulário que precisam tratar 
+  // algum valor antes de setar o objeto ao formulário 
+  protected prepareFormValues(resource): T {
+    return resource;
+  }
+
+  // Metodo criado para formatar valores antes de enviar para o servidor
+  protected prepareValuesToServer(resource): T {
+    return resource;
   }
 
   protected setPageTitle() {
@@ -92,7 +103,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
   }
 
   protected createResource() {
-    const resource: T = this.jsonDataToResourceFn(this.resourceForm.value);   
+    const resource: T = this.prepareValuesToServer(this.jsonDataToResourceFn(this.resourceForm.value));
     this.resourceService.create(resource).subscribe(
       resource => {
         this.actionsForSuccess(resource)
@@ -104,7 +115,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
   }
 
   protected updateResource() {
-    const resource: T = this.jsonDataToResourceFn(this.resourceForm.value);
+    const resource: T = this.prepareValuesToServer(this.jsonDataToResourceFn(this.resourceForm.value));
     this.resourceService.update(resource).subscribe(
       resource => {
         this.actionsForSuccess(resource)
@@ -125,7 +136,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
     // A propriedade "skipLocationChange" não adiciona o historico de navegação para essa rota.
     this.router.navigateByUrl(parentRoute, {skipLocationChange: true}).then(
       () => {
-        this.router.navigate([parentRoute, resource.id, 'edit']);
+        this.router.navigate([parentRoute, resource._id, 'edit']);
       }
     );
   }

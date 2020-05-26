@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="card" style="margin-top: 25%;">
+        <p style="text-align: center; font-size: 50px;"><strong>f</strong>ortune</p>
+        <div class="card-body">
+            <form [formGroup]="loginForm">
+                <div class="form-group">
+                    <label for="email"><strong>E-mail</strong></label>
+                    <input type="email" class="form-control" id="email" placeholder="Informe seu e-mail" formControlName="email">
+                  </div>
+                  <div class="form-group">
+                    <label for="password"><strong>Senha</strong></label>
+                    <input type="password" class="form-control" id="password" placeholder="Informe sua senha" formControlName="password">
+                  </div>
+                  <button class="btn btn-dark mt-3 mb-3" style="width: 100%;" (click)="login()">Entrar</button>
+            </form>
+            <p>Faça seu login ou se cadastre <a [routerLink]="['/auth/register']">aqui</a>.</p>
+        </div>
+    </div>
+</div>
+

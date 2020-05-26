@@ -1,54 +1,49 @@
 <app-bread-crumb 
-    [items]="[{ text: 'Posição Mensal'}]">
+    [items]="[{ text: 'Posição por período'}]">
 </app-bread-crumb>
 
 <app-page-header
-    [headerParams]="{ title: 'Posição Mensal', btnClass: '', btnLink: '', btnText: '' , showButton: false }"
+    [headerParams]="{ title: 'Posição por período', btnClass: '', btnLink: '', btnText: '' , showButton: false }"
 ></app-page-header>
 
 <div class="card">
     <div class="card-header">
-        Selecione o mês e ano para gerar a posição mensal
+        Selecione o período para visualizar os dados
     </div>
     <div class="card-body">
-        <div class="form-row">
-            <div class="form-group col-md-7">
-                <label for="month">Mês</label>
-                <select #month name="month" id="month" class="form-control">
-                    <option value="">Selecione um mês</option>
-                    <option value="1">Janeiro</option>
-                    <option value="2">Fevereiro</option>
-                    <option value="3">Março</option>
-                    <option value="4">Abril</option>
-                    <option value="5">Maio</option>
-                    <option value="6">Junho</option>
-                    <option value="7">Julho</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Setembro</option>
-                    <option value="10">Outubro</option>
-                    <option value="11">Novembro</option>
-                    <option value="12">Dezembro</option>
-                </select>
-            </div>
-            <div class="form-group col-md-5">
-                <label for="year">Ano</label>
-                <select #year name="year" id="year" class="form-control">
-                    <option value="">Selecione um ano</option>
-                    <option value="2018">2018</option>
-                    <option value="2019">2019</option>
-                    <option value="2020">2020</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                </select>
-
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col-md text-right">
-                <button type="button" (click)="generateReports()" class="btn btn-dark">Processar</button>
-            </div>
-        </div>
+        <form [formGroup]="filtersForm">
+            <div class="form-row">
+                <div class="form-group col-md-1">
+                    <label for="initialDueDate">Data Inicial</label>
+                        
+                </div>
+                <div class="form-group col-md-3">
+                    <p-calendar id="initialDueDate" 
+                                formControlName="initialDueDate"
+                                inputStyleClass="form-control"
+                                dateFormat="dd/mm/yy"
+                                [locale]="ptBR"
+                                [showButtonBar]="true">
+                    </p-calendar>
+                </div>
+                <div class="form-group col-md-1">
+                    <label for="finalDueDate">Data Final</label>
+                </div>
+                <div class="form-group col-md-3">
+                    <p-calendar id="finalDueDate" 
+                                formControlName="finalDueDate"
+                                inputStyleClass="form-control"
+                                dateFormat="dd/mm/yy"
+                                [locale]="ptBR"
+                                [showButtonBar]="true">
+                    </p-calendar>
+                </div>
+                <div class="col-md text-right">
+                    <button type="button" (click)="generateReports()" class="btn btn-dark" style="width: 100%;">Processar</button>
+                </div>
+            </div>    
+            
+        </form>
     </div>
 </div>
 
@@ -56,7 +51,7 @@
     <!-- RECEITAS -->
     <div class="card text-center text-white bg-success">
         <div class="card-header">
-            Total de Receitas
+            Receitas
         </div>
         <div class="card-body">
             <h3 class="card-title">
@@ -67,7 +62,7 @@
     <!-- DESPESAS -->
     <div class="card text-center text-white bg-danger">
         <div class="card-header">
-            Total de Despesas
+            Despesas
         </div>
         <div class="card-body">
             <h3 class="card-title">
@@ -75,9 +70,20 @@
             </h3>
         </div>
     </div>
-
-    <!-- SALDO -->
+    <!-- INVESTIMENTOS -->
     <div class="card text-center text-white bg-info">
+        <div class="card-header">
+            Investimentos
+        </div>
+        <div class="card-body">
+            <h3 class="card-title">
+                {{investmentTotal}}
+            </h3>
+        </div>
+    </div>
+    
+    <!-- SALDO -->
+    <div class="card text-center text-white bg-warning">
         <div class="card-header">
             Saldo
         </div>
@@ -85,7 +91,7 @@
             <h3 class="card-title">
                 {{balance}}
             </h3>
-            <!-- <small>Ufa, sobrou grana!</small> --> 
+            <small>{{balanceMessage}}</small>
         </div>
     </div>
 </div>
