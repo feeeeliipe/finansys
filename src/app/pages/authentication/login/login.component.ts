@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
     this.authtenticationService.login(this.loginForm.value).subscribe(user => {
       localStorage.clear();
       localStorage.setItem('fortune-token', user.token)
-      this.router.navigate(['/entries']);
+      this.router.navigate(['/reports']);
     },
     errorResponse => {
       toastr.error(errorResponse.error.error)
